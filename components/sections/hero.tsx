@@ -1,40 +1,66 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
 import Image from "next/image";
 import { Container } from "@/components/shared/container";
 import { socialMetrics } from "@/lib/constants";
 
-type CubicBezier = [number, number, number, number];
-const ease: CubicBezier = [0.22, 1, 0.36, 1];
+/* ── CSS fade-up animation (replaces framer-motion for hero) ── */
+
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`animate-fade-up ${className}`}
+      style={{ animationDelay: `${delay}ms`, animationFillMode: "both" }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ── CountUp (uses Intersection Observer instead of framer-motion) ── */
 
 function CountUp({ target, suffix }: { target: number; suffix: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true });
   const hasAnimated = useRef(false);
 
   useEffect(() => {
-    if (!isInView || hasAnimated.current) return;
-    hasAnimated.current = true;
-    const isDecimal = target % 1 !== 0;
-    const steps = 45;
-    const increment = target / steps;
-    let current = 0;
-    const interval = 1500 / steps;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(isDecimal ? parseFloat(current.toFixed(1)) : Math.floor(current));
-      }
-    }, interval);
-    return () => clearInterval(timer);
-  }, [isInView, target]);
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting || hasAnimated.current) return;
+        hasAnimated.current = true;
+        const isDecimal = target % 1 !== 0;
+        const steps = 45;
+        const increment = target / steps;
+        let current = 0;
+        const interval = 1500 / steps;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            setCount(target);
+            clearInterval(timer);
+          } else {
+            setCount(isDecimal ? parseFloat(current.toFixed(1)) : Math.floor(current));
+          }
+        }, interval);
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [target]);
 
   return (
     <span ref={ref}>
@@ -48,12 +74,7 @@ function CountUp({ target, suffix }: { target: number; suffix: string }) {
 
 function DashboardPreview() {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 60 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.9, delay: 0.5, ease }}
-      className="relative"
-    >
+    <FadeUp delay={500} className="relative">
       {/* Glow behind */}
       <div className="absolute -inset-8 rounded-3xl bg-blue-400/10 blur-3xl" aria-hidden="true" />
 
@@ -77,16 +98,17 @@ function DashboardPreview() {
 
         {/* Screenshot */}
         <Image
-          src="/dashboard-preview.png"
+          src="/dashboard-preview.webp"
           alt="Vivgram dashboard showing task overview, compliance tracking, and performance metrics"
           width={1449}
           height={900}
+          sizes="(max-width: 1024px) 100vw, 58vw"
           className="block w-full object-cover object-left-top"
           style={{ minHeight: 560 }}
           priority
         />
       </div>
-    </motion.div>
+    </FadeUp>
   );
 }
 
@@ -104,41 +126,27 @@ export default function Hero() {
         <div className="flex flex-col lg:flex-row lg:items-center">
           {/* Left: Copy — stays within max-width */}
           <div className="mx-auto w-full max-w-7xl px-6 lg:w-[42%] lg:shrink-0 lg:pl-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))] lg:pr-16">
-            <motion.span
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1, ease }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-blue-200 backdrop-blur-sm"
-            >
-              No More Spreadsheet Chaos
-            </motion.span>
+            <FadeUp delay={100}>
+              <span className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-blue-200 backdrop-blur-sm">
+                No More Spreadsheet Chaos
+              </span>
+            </FadeUp>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2, ease }}
-              className="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl"
-            >
-              Stop Managing Your Facility in Spreadsheets
-            </motion.h1>
+            <FadeUp delay={200}>
+              <h1 className="text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl lg:text-6xl">
+                Stop Managing Your Facility in Spreadsheets
+              </h1>
+            </FadeUp>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3, ease }}
-              className="mt-6 max-w-lg text-base leading-relaxed text-blue-100/90 md:text-lg"
-            >
-              Vivgram brings protocol management, daily observations, task
-              scheduling, and compliance tracking into one intuitive platform
-              — so your team can focus on the science.
-            </motion.p>
+            <FadeUp delay={300}>
+              <p className="mt-6 max-w-lg text-base leading-relaxed text-blue-100/90 md:text-lg">
+                Vivgram brings protocol management, daily observations, task
+                scheduling, and compliance tracking into one intuitive platform
+                — so your team can focus on the science.
+              </p>
+            </FadeUp>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4, ease }}
-              className="mt-10 flex flex-col gap-4 sm:flex-row"
-            >
+            <FadeUp delay={400} className="mt-10 flex flex-col gap-4 sm:flex-row">
               <a
                 href="#cta"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-primary-700 shadow-[0_1px_3px_rgba(0,0,0,0.1)] transition-all duration-200 hover:scale-[1.02] hover:bg-blue-50"
@@ -153,15 +161,10 @@ export default function Hero() {
                 <Play className="h-4 w-4" />
                 Watch Overview
               </a>
-            </motion.div>
+            </FadeUp>
 
             {/* Value props */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5, ease }}
-              className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-6"
-            >
+            <FadeUp delay={500} className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-6">
               {[
                 "Save hours on manual tasks",
                 "Stay audit-ready, always",
@@ -176,7 +179,7 @@ export default function Hero() {
                   <span className="text-sm text-blue-100/90">{prop}</span>
                 </div>
               ))}
-            </motion.div>
+            </FadeUp>
           </div>
 
           {/* Right: Dashboard — breaks out to the right edge */}
@@ -189,19 +192,12 @@ export default function Hero() {
 
         {/* Social metrics bar */}
         <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.7, ease }}
-            className="mt-16 border-t border-white/10 pt-10 pb-12 md:mt-20"
-          >
+          <FadeUp delay={700} className="mt-16 border-t border-white/10 pt-10 pb-12 md:mt-20">
             <div className="grid grid-cols-3 gap-4">
               {socialMetrics.map((metric, i) => (
-                <motion.div
+                <FadeUp
                   key={metric.label}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.8 + i * 0.1, ease }}
+                  delay={800 + i * 100}
                   className="relative text-center"
                 >
                   {i > 0 && (
@@ -213,10 +209,10 @@ export default function Hero() {
                   <div className="mt-1 text-xs font-medium tracking-wide text-blue-200/70 sm:text-sm">
                     {metric.label}
                   </div>
-                </motion.div>
+                </FadeUp>
               ))}
             </div>
-          </motion.div>
+          </FadeUp>
         </Container>
       </div>
     </section>

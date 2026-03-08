@@ -1,19 +1,20 @@
+import dynamic from "next/dynamic";
 import Navbar from "@/components/layout/navbar";
 import Hero from "@/components/sections/hero";
 import Marquee from "@/components/sections/marquee";
 
-import ProblemSection from "@/components/sections/problem-section";
-import FeaturesSection from "@/components/sections/features-section";
-import HowItWorks from "@/components/sections/how-it-works";
-import RolesSection from "@/components/sections/roles-section";
-
-import ProductPreview from "@/components/sections/product-preview";
-import TestimonialSection from "@/components/sections/testimonial-section";
-import MidCTA from "@/components/sections/mid-cta";
-import SecuritySection from "@/components/sections/security-section";
-import FAQSection from "@/components/sections/faq-section";
-import CTASection from "@/components/sections/cta-section";
-import Footer from "@/components/layout/footer";
+/* Code-split below-the-fold sections into separate chunks */
+const ProblemSection = dynamic(() => import("@/components/sections/problem-section"));
+const FeaturesSection = dynamic(() => import("@/components/sections/features-section"));
+const HowItWorks = dynamic(() => import("@/components/sections/how-it-works"));
+const RolesSection = dynamic(() => import("@/components/sections/roles-section"));
+const ProductPreview = dynamic(() => import("@/components/sections/product-preview"));
+const TestimonialSection = dynamic(() => import("@/components/sections/testimonial-section"));
+const MidCTA = dynamic(() => import("@/components/sections/mid-cta"));
+const SecuritySection = dynamic(() => import("@/components/sections/security-section"));
+const FAQSection = dynamic(() => import("@/components/sections/faq-section"));
+const CTASection = dynamic(() => import("@/components/sections/cta-section"));
+const Footer = dynamic(() => import("@/components/layout/footer"));
 
 export default function Home() {
   return (
