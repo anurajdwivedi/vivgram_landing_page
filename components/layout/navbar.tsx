@@ -127,12 +127,32 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-100 bg-white md:hidden"
+            className="fixed inset-0 top-0 z-40 bg-white md:hidden"
           >
+            {/* Header area matching navbar height */}
+            <div className="flex items-center justify-between px-6 py-4">
+              <Link href="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+                <div className="flex flex-col gap-1">
+                  <span className="text-xl font-bold leading-none text-primary-700">
+                    Vivgram
+                  </span>
+                  <span className="text-[9px] font-medium tracking-wide text-slate-500">
+                    Powered by Team iTek
+                  </span>
+                </div>
+              </Link>
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close navigation menu"
+              >
+                <X className="h-6 w-6 text-slate-700" />
+              </button>
+            </div>
+
             <div className="flex flex-col gap-1 px-6 py-6">
               {navLinks.map((link) => (
                 <a
