@@ -1,0 +1,16 @@
+{
+  "name": "Vivgram",
+  "short_name": "Vivgram",
+  "description": "Research Operations & Lifecycle Management Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#082B63",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}
