@@ -44,7 +44,7 @@ export default function ProductPreview() {
               <div className="h-3 w-3 rounded-full bg-green-400" />
             </div>
             <div className="mx-auto rounded-md bg-slate-700 px-4 py-1 text-xs text-slate-400">
-              app.vivgram.com/dashboard
+              vivgram.com
             </div>
           </div>
 

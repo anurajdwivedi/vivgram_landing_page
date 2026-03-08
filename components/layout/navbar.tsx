@@ -37,7 +37,6 @@ export default function Navbar() {
           Skip to main content
         </a>
         <Link href="/" className="flex items-center gap-2">
-          <span className="inline-block h-2 w-2 rounded-sm bg-primary-500" />
           <div className="flex flex-col gap-1">
             <span
               className={cn(

@@ -7,8 +7,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="inline-block h-2 w-2 rounded-sm bg-primary-500" />
+            <Link href="/" className="inline-block">
               <span className="text-xl font-bold text-white">Vivgram</span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed text-slate-300">
@@ -43,7 +42,7 @@ export default function Footer() {
           </p>
           <p className="text-sm text-slate-500">
             Powered by{" "}
-            <span className="font-medium text-slate-300">Team iTek</span>
+            <a href="https://teamitekllc.com/" target="_blank" rel="noopener noreferrer" className="font-medium text-slate-300 hover:text-white transition-colors">Team iTek</a>
           </p>
           <div className="flex gap-6">
             {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(
