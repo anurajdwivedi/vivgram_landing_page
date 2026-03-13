@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { useBrand, brandText } from "@/lib/brand-context";
 
 /* ── Illustrations ──────────────────────────────────────── */
 
@@ -331,7 +332,7 @@ const trustPoints = [
   {
     title: "Purpose-Built for Animal Research",
     description:
-      "Not a generic lab tool adapted for research. Vivgram is designed from the ground up for animal care and facility operations.",
+      "Not a generic lab tool adapted for research. {brand} is designed from the ground up for animal care and facility operations.",
     Illustration: AnimalResearchIllustration,
   },
   {
@@ -399,6 +400,7 @@ function AdvantageCard({
 }
 
 export default function TestimonialSection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -408,9 +410,9 @@ export default function TestimonialSection() {
       <div className="pointer-events-none absolute right-1/4 bottom-10 h-72 w-72 rounded-full bg-blue-50/40 blur-3xl animate-orb-slow" aria-hidden="true" />
       <Container>
         <SectionHeader
-          overline="The Vivgram Advantage"
+          overline={`The ${brand} Advantage`}
           heading="Built Different. Built Better."
-          subtext="Vivgram is not another generic tool. It is purpose-built for the unique challenges of animal research facility operations."
+          subtext={`${brand} is not another generic tool. It is purpose-built for the unique challenges of animal research facility operations.`}
         />
 
         <motion.div
@@ -421,7 +423,7 @@ export default function TestimonialSection() {
           className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3"
         >
           {trustPoints.map((point) => (
-            <AdvantageCard key={point.title} {...point} />
+            <AdvantageCard key={point.title} {...point} description={brandText(point.description, brand)} />
           ))}
         </motion.div>
       </Container>

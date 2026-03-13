@@ -26,12 +26,15 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 // ─── Navigation ──────────────────────────────────────────
-export const navLinks = [
-  { label: "Why Vivgram", href: "#why-vivgram" },
-  { label: "Features", href: "#features" },
-  { label: "Roles", href: "#roles" },
-  { label: "Platform", href: "#platform" },
-] as const;
+export const getNavLinks = (brand: string) =>
+  [
+    { label: `Why ${brand}`, href: "#why-vivgram" },
+    { label: "Features", href: "#features" },
+    { label: "Roles", href: "#roles" },
+    { label: "Platform", href: "#platform" },
+  ] as const;
+
+export const navLinks = getNavLinks("Vivgram");
 
 // ─── Marquee ─────────────────────────────────────────────
 export const marqueeItems = [
@@ -176,7 +179,7 @@ export const roles: RoleCard[] = [
     icon: FlaskConical,
     accentColor: "blue",
     description:
-      "Vivgram equips technicians with mobile-friendly tools for daily work execution. Access task queues, log data digitally, and complete checklists from any device, anywhere in the facility.",
+      "{brand} equips technicians with mobile-friendly tools for daily work execution. Access task queues, log data digitally, and complete checklists from any device, anywhere in the facility.",
     capabilities: [
       "View and complete assigned daily tasks across rooms and service areas",
       "Submit health observation reports and log specimen condition data",
@@ -189,7 +192,7 @@ export const roles: RoleCard[] = [
     icon: HardHat,
     accentColor: "emerald",
     description:
-      "Vivgram helps facility supervisors manage resources, equipment, and daily operations with full visibility. Schedule maintenance, assign tasks, and monitor utilization.",
+      "{brand} helps facility supervisors manage resources, equipment, and daily operations with full visibility. Schedule maintenance, assign tasks, and monitor utilization.",
     capabilities: [
       "Schedule and assign task groups across rooms with frequency controls",
       "Manage operational workflows and oversee daily facility activities",
@@ -202,7 +205,7 @@ export const roles: RoleCard[] = [
     icon: BarChart3,
     accentColor: "purple",
     description:
-      "Vivgram provides operation managers with the workflow tools they need to coordinate complex, cross-functional research activities. Automate handoffs, track task completion, and maintain real-time visibility into team capacity.",
+      "{brand} provides operation managers with the workflow tools they need to coordinate complex, cross-functional research activities. Automate handoffs, track task completion, and maintain real-time visibility into team capacity.",
     capabilities: [
       "Monitor all rooms, manage protocol submissions, and handle service requests",
       "Track facility-wide performance metrics and operational analytics",
@@ -215,7 +218,7 @@ export const roles: RoleCard[] = [
     icon: LayoutDashboard,
     accentColor: "amber",
     description:
-      "Vivgram gives project coordinators a single command center for their entire operation. Monitor study progress, track compliance status across programs, and generate executive-ready reports.",
+      "{brand} gives project coordinators a single command center for their entire operation. Monitor study progress, track compliance status across programs, and generate executive-ready reports.",
     capabilities: [
       "Full dashboard access with task statistics, health trends, and inventory data",
       "Oversee lab resource allocation and facility-wide operational status",
@@ -228,7 +231,7 @@ export const roles: RoleCard[] = [
     icon: GraduationCap,
     accentColor: "slate",
     description:
-      "Vivgram simplifies the administrative burden of research so faculty directors can focus on advancing science. Submit protocols through guided digital forms, track study milestones, and manage team coordination all from one place.",
+      "{brand} simplifies the administrative burden of research so faculty directors can focus on advancing science. Submit protocols through guided digital forms, track study milestones, and manage team coordination all from one place.",
     capabilities: [
       "Submit and track service requests including transfers and operational needs",
       "Manage research colonies, view assigned protocols, and monitor status",

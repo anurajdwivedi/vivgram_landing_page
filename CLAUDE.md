@@ -50,16 +50,20 @@ Vivgram is a **Research Operations & Lifecycle Management Platform** for animal 
 ## Directory Structure
 ```
 app/
-├── page.tsx              # Homepage composition (dynamic imports for code-splitting)
-├── layout.tsx            # Root layout, metadata, JSON-LD, fonts
+├── page.tsx              # Vivgram homepage (renders LandingPage with brand="Vivgram")
+├── mousapp/page.tsx      # MousApp homepage (renders LandingPage with brand="MousApp")
+├── layout.tsx            # Root layout, metadata, JSON-LD, fonts, icon refs
+├── opengraph-image.tsx   # Dynamic OG image generation (1200x630) with logo
+├── favicon.ico           # Favicon (32x32, generated from logo)
 ├── globals.css           # Global styles, dot-grid, grain, animations, fade-up keyframe
 ├── sitemap.ts            # XML sitemap
 components/
 ├── layout/
-│   ├── navbar.tsx        # Fixed header, scroll-aware, full-screen mobile menu overlay
-│   └── footer.tsx        # Dark footer, Team iTek link
-├── sections/             # 16 page sections
-│   ├── hero.tsx          # CSS animations, dashboard screenshot in browser frame, CountUp metrics
+│   ├── navbar.tsx        # Fixed header, brand switcher, scroll-aware, mobile menu
+│   └── footer.tsx        # Dark footer, Team iTek link (uses brand context)
+├── landing-page.tsx      # Shared landing page component (accepts brand prop)
+├── sections/             # Page sections
+│   ├── hero.tsx          # CSS animations, person image, CountUp metrics, "Contact Us" CTA
 │   ├── marquee.tsx       # Scrolling feature strip
 │   ├── problem-section.tsx
 │   ├── features-section.tsx   # 6 feature cards with SVG illustrations
@@ -85,15 +89,24 @@ components/
     ├── badge.tsx          # Badge component
     └── separator.tsx      # Divider
 lib/
-├── constants.ts           # ALL data: nav links, features, roles, FAQ, etc.
+├── brand-context.tsx      # BrandProvider, useBrand hook, brandText utility
+├── constants.ts           # ALL data: nav links, features, roles, FAQ, etc. (uses {brand} placeholders)
 ├── animations.ts          # Framer Motion variants
 ├── utils.ts               # cn() utility (clsx + tailwind-merge)
 └── hooks/
     └── use-reduced-motion.ts  # Accessibility hook
 public/
-├── dashboard-preview.webp # Hero dashboard screenshot (WebP, ~86KB)
-├── dashboard-preview.png  # Original PNG version (345KB, kept as fallback)
-├── manifest.json          # PWA manifest
+├── logo.png               # Vivgram logo (468x458, mouse+bars icon with text, transparent PNG)
+├── favicon-16x16.png      # 16px favicon
+├── favicon-32x32.png      # 32px favicon
+├── apple-touch-icon.png   # 180px Apple touch icon
+├── icon-192x192.png       # 192px PWA icon
+├── icon-512x512.png       # 512px PWA icon
+├── hero-person.png        # Hero person image, transparent background (1200x800, ~527KB)
+├── hero-person.jpg        # Original person image with white bg (kept as source)
+├── dashboard-preview.webp # Dashboard screenshot (WebP, ~86KB) — kept for reference
+├── dashboard-preview.png  # Original PNG version (345KB) — kept for reference
+├── manifest.json          # PWA manifest (references all icon sizes)
 └── robots.txt             # SEO robots
 ```
 
@@ -103,51 +116,73 @@ public/
 - **CountUp**: Uses native `IntersectionObserver` instead of framer-motion `useInView`
 - **Code-splitting**: All below-the-fold sections use `next/dynamic` imports in `page.tsx`
 - **Next.js image config**: AVIF/WebP auto-format, responsive `deviceSizes` and `imageSizes`
-- **Responsive sizes**: Hero image uses `sizes="(max-width: 1024px) 100vw, 58vw"`
+- **Responsive sizes**: Hero person uses `sizes="(max-width: 768px) 60vw, (max-width: 1024px) 45vw, 400px"`
 - **Font**: `display: "swap"` strategy, latin subset only
 
-## Page Section Order (app/page.tsx)
-1. Navbar (eagerly loaded)
+## Multi-Brand Architecture
+- **BrandContext**: `lib/brand-context.tsx` — provides `useBrand()` hook and `brandText()` utility
+- **Brands**: "Vivgram" (`/`) and "MousApp" (`/mousapp`) — identical content, different app name
+- **Shared component**: `components/landing-page.tsx` — accepts `brand` prop, wraps in `BrandProvider`
+- **Routes**: `app/page.tsx` → Vivgram, `app/mousapp/page.tsx` → MousApp
+- **Brand switcher**: Dark bar fixed above navbar with dropdown to switch between brands
+- **Constants**: Role descriptions use `{brand}` placeholders, replaced at render via `brandText()`
+- **Nav links**: `getNavLinks(brand)` returns brand-specific nav (e.g., "Why Vivgram" / "Why MousApp")
+
+## Page Section Order (components/landing-page.tsx)
+1. Navbar (eagerly loaded, includes brand switcher bar)
 2. Hero (eagerly loaded, CSS animations)
 3. Marquee (eagerly loaded)
 4. Problem Section (dynamic import)
 5. Features Section (dynamic import)
 6. How It Works (dynamic import)
 7. Roles Section (dynamic import)
-8. Product Preview (dynamic import)
-9. Testimonial Section (dynamic import)
-10. Mid CTA (dynamic import)
-11. Security Section (dynamic import)
-12. FAQ Section (dynamic import)
-13. CTA Section (dynamic import)
-14. Footer (dynamic import)
+8. Testimonial Section (dynamic import)
+9. Mid CTA (dynamic import)
+10. Security Section (dynamic import)
+11. FAQ Section (dynamic import)
+12. CTA Section (dynamic import)
+13. Footer (dynamic import)
 
 ## Hero Section Details
-- **Layout**: Flex row — left 42% (copy), right 58% (dashboard)
-- **Dashboard**: Real screenshot (`/dashboard-preview.webp`) in a browser chrome frame
-- **Browser frame**: macOS dots (red/yellow/green) + URL bar showing `vivgram.com`
-- **Dashboard bleeds to right edge** — `rounded-l-2xl border-r-0`, no right padding
+- **Layout**: Flex row — left 50% (copy), right 45% (person image, flex-1)
+- **Person image**: `/hero-person.png` — professional in blue shirt, arms crossed (transparent bg via rembg, 495x678)
+- **No decorative elements** behind the person — clean, minimal look
+- **Person positioning**: `justify-center` — centered within the right container
+- **Person sizing**: `lg:h-[540px] xl:h-[600px]` with responsive mobile sizing (`w-[70%] md:w-[60%]`)
 - **Badge**: "No More Spreadsheet Chaos"
-- **Headline**: "Stop Managing Your Facility in Spreadsheets"
-- **CTAs**: "Request a Demo" (white, primary) + "Watch Overview" (outline)
-- **Value props**: 3 checkmark items below CTAs
+- **Headline**: "Stop Managing Your Facility in Spreadsheets" (fits 2 lines at `lg:text-[2.75rem] xl:text-[3.25rem]`)
+- **CTA**: Single "Contact Us" button (white, primary) — "Watch Overview" removed
+- **Value props**: 3 checkmark items below CTA
 - **Social metrics bar**: 3 CountUp animated stats at bottom
 - **Animations**: CSS `FadeUp` component with staggered delays (100ms, 200ms, 300ms, etc.)
+
+## Navbar (navbar.tsx)
+- Brand switcher bar: dark `bg-[#061B3F]` fixed bar at `z-[60]` above navbar (34px height)
+- Navbar sits at `top-[34px]` to account for switcher bar
+- "Contact Us" button hidden by default, appears on scroll (`opacity-0 → opacity-100` with translate transition)
+- On scroll: white bg with blur, "Contact Us" button slides in with primary-700 style
+- All text (logo name, nav links) uses `brand` from context
 
 ## Mobile Menu (navbar.tsx)
 - Full-screen overlay (`fixed inset-0 z-40 bg-white`) using framer-motion `AnimatePresence`
 - Has its own header with logo + close (X) button
 - Covers entire viewport — no content bleeds through
-- Links: Why Vivgram, Features, Roles, Platform, Log In, Request a Demo
+- Links: Why {brand}, Features, Roles, Platform, Log In, Contact Us
 
 ## Branding
-- **Logo**: Text-only "Vivgram" (no dot icon) — `text-xl font-bold`
+- **Logo**: Image (`/logo.png`) — mouse silhouette + bar chart icon in rounded square frame
+- **Logo usage**: Navbar (desktop + mobile) and footer show 36x35px logo image + "Vivgram" text
+- **Logo on dark bg**: Uses `brightness-0 invert` CSS filter to make logo white
 - **Subtitle**: "Powered by Team iTek" in navbar (no link)
 - **Footer**: Team iTek links to https://teamitekllc.com/
 - **Mock browser URLs**: Always use `vivgram.com` (not app.vivgram.com)
+- **Favicon**: Generated from logo at 16x16 and 32x32 (ICO in `app/favicon.ico`)
+- **OG Image**: Dynamic via `app/opengraph-image.tsx` — shows logo + brand gradient + tagline stats
 
 ## SEO & Accessibility (Completed Audit)
+- `metadataBase` set to `https://vivgram.com` for proper OG/icon URL resolution
 - Full OG/Twitter Card metadata + canonical URL
+- Dynamic OG image (`app/opengraph-image.tsx`) with logo, brand gradient, and tagline
 - JSON-LD SoftwareApplication schema
 - sitemap.ts + robots.txt + manifest.json
 - Skip-to-content link in navbar → `<main id="main-content">`
@@ -163,7 +198,8 @@ public/
 - Internal navigation: Next.js `<Link>` component (not `<a>`)
 
 ## Key Data in lib/constants.ts
-- `navLinks`: 4 items (Why Vivgram, Features, Roles, Platform)
+- `getNavLinks(brand)`: 4 items (Why {brand}, Features, Roles, Platform)
+- `navLinks`: default Vivgram nav links (backward compat)
 - `marqueeItems`: 9 scrolling feature names
 - `socialMetrics`: [{value: 50, suffix: "%", label: "Time Saved..."}, ...]
 - `benefits`: 6 cards with lucide icons
@@ -179,6 +215,6 @@ public/
 - The `Container` component = `max-w-7xl mx-auto px-6 lg:px-8`
 - Hero uses CSS animations with `FadeUp` wrapper component (no framer-motion)
 - Other sections use Framer Motion `useInView` with `once: true` for scroll animations
-- The hero dashboard image uses `object-cover object-left-top` with `minHeight: 560px`
+- Hero uses person image with decorative background shape (Cayuse-style layout)
 - PageSpeed scores (as of Mar 2024): Mobile ~85 Performance, 95 Accessibility, 96 Best Practices, 100 SEO
 - Always update this CLAUDE.md when making changes to the project

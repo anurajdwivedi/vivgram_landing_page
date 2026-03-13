@@ -10,6 +10,7 @@ const lato = Lato({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vivgram.com"),
   title: "Vivgram | Research Operations & Lifecycle Management Platform",
   description:
     "Manage research facility operations, task scheduling, health tracking, protocol management, and compliance reporting in one connected platform. 50% time saved. 100% audit ready.",
@@ -23,6 +24,13 @@ export const metadata: Metadata = {
     "IACUC compliance software",
     "research lifecycle management",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Vivgram | One Platform. Full Lifecycle. Effortless Management.",
     description:
@@ -30,21 +38,12 @@ export const metadata: Metadata = {
     type: "website",
     url: "https://vivgram.com",
     siteName: "Vivgram",
-    images: [
-      {
-        url: "https://vivgram.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Vivgram — Research Operations & Lifecycle Management Platform",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Vivgram | Research Operations Platform",
     description:
       "Manage research facility operations, task scheduling, health tracking, protocol management, and compliance reporting in one connected platform.",
-    images: ["https://vivgram.com/og-image.png"],
   },
   robots: {
     index: true,

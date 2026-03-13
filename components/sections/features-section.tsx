@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { useBrand } from "@/lib/brand-context";
 
 /* ── Illustrations ──────────────────────────────────────── */
 
@@ -591,6 +592,7 @@ function FeatureCard({
 /* ── Section ────────────────────────────────────────────── */
 
 export default function FeaturesSection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -601,7 +603,7 @@ export default function FeaturesSection() {
       <div className="pointer-events-none absolute -left-40 bottom-40 h-96 w-96 rounded-full bg-violet-100/40 blur-3xl animate-orb-slow" aria-hidden="true" />
       <Container>
         <SectionHeader
-          overline="The Vivgram Platform"
+          overline={`The ${brand} Platform`}
           heading="Everything You Need, Nothing You Don't"
           subtext="Purpose-built tools for every aspect of animal research facility management."
         />

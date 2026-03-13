@@ -4,8 +4,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/shared/container";
+import { useBrand } from "@/lib/brand-context";
 
 export default function MidCTA() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -24,7 +26,7 @@ export default function MidCTA() {
         >
           <div>
             <h2 className="text-2xl font-bold text-white md:text-3xl">
-              Ready to see Vivgram in action?
+              Ready to see {brand} in action?
             </h2>
             <p className="mt-2 text-base text-blue-100/90">
               Join our early access program and be among the first to transform your facility operations.
@@ -34,7 +36,7 @@ export default function MidCTA() {
             href="#cta"
             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-primary-700 shadow-[0_1px_3px_rgba(0,0,0,0.1)] transition-all duration-200 hover:scale-[1.02] hover:bg-blue-50"
           >
-            Request Early Access
+            Contact Us
             <ArrowRight className="h-4 w-4" />
           </a>
         </motion.div>

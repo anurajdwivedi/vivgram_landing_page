@@ -7,22 +7,23 @@ import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { staggerContainer, fadeUp } from "@/lib/animations";
 import { cn } from "@/lib/utils";
+import { useBrand, brandText } from "@/lib/brand-context";
 
 const faqs = [
   {
-    question: "What is Vivgram and who is it built for?",
+    question: "What is {brand} and who is it built for?",
     answer:
-      "Vivgram is a research operations and lifecycle management platform purpose-built for animal research facilities. It serves technicians, facility supervisors, operations managers, project coordinators, and faculty, giving each role a tailored dashboard and workflow.",
+      "{brand} is a research operations and lifecycle management platform purpose-built for animal research facilities. It serves technicians, facility supervisors, operations managers, project coordinators, and faculty, giving each role a tailored dashboard and workflow.",
   },
   {
-    question: "How does Vivgram handle task scheduling?",
+    question: "How does {brand} handle task scheduling?",
     answer:
-      "Vivgram lets you create task groups with customizable frequency modes, assign them to specific rooms and service areas, and set date ranges. Overdue tasks are automatically detected and flagged, ensuring nothing falls through the cracks.",
+      "{brand} lets you create task groups with customizable frequency modes, assign them to specific rooms and service areas, and set date ranges. Overdue tasks are automatically detected and flagged, ensuring nothing falls through the cracks.",
   },
   {
-    question: "Can Vivgram integrate with our existing systems?",
+    question: "Can {brand} integrate with our existing systems?",
     answer:
-      "Vivgram is designed to work alongside your existing institutional infrastructure. Our team works with you during onboarding to ensure smooth data migration and setup. Contact us to discuss your specific integration needs.",
+      "{brand} is designed to work alongside your existing institutional infrastructure. Our team works with you during onboarding to ensure smooth data migration and setup. Contact us to discuss your specific integration needs.",
   },
   {
     question: "How does role-based access control work?",
@@ -32,7 +33,7 @@ const faqs = [
   {
     question: "Is our data secure and compliant?",
     answer:
-      "Absolutely. All data is encrypted at rest and in transit. Vivgram provides complete audit trails, automated compliance dashboards, and is hosted on secure cloud infrastructure with 99.9% uptime SLA and geographic redundancy.",
+      "Absolutely. All data is encrypted at rest and in transit. {brand} provides complete audit trails, automated compliance dashboards, and is hosted on secure cloud infrastructure with 99.9% uptime SLA and geographic redundancy.",
   },
   {
     question: "How long does it take to get started?",
@@ -40,9 +41,9 @@ const faqs = [
       "Most facilities are up and running within days. Our guided setup wizard helps you configure your facility structure, import existing data, invite team members, and start scheduling tasks right away.",
   },
   {
-    question: "What kind of reports and analytics does Vivgram provide?",
+    question: "What kind of reports and analytics does {brand} provide?",
     answer:
-      "Vivgram offers health observation reports, disease trend charts, room-wise breakdowns, completion rates, efficiency scores, capacity utilization tracking, and compliance dashboards, all accessible in real time from your dashboard.",
+      "{brand} offers health observation reports, disease trend charts, room-wise breakdowns, completion rates, efficiency scores, capacity utilization tracking, and compliance dashboards, all accessible in real time from your dashboard.",
   },
   {
     question: "Is there a free trial available?",
@@ -119,6 +120,7 @@ function FAQItem({
 }
 
 export default function FAQSection() {
+  const { brand } = useBrand();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -132,7 +134,7 @@ export default function FAQSection() {
         <SectionHeader
           overline="FAQ"
           heading="Frequently Asked Questions"
-          subtext="Everything you need to know about Vivgram and how it can transform your facility operations."
+          subtext={`Everything you need to know about ${brand} and how it can transform your facility operations.`}
         />
         <motion.div
           ref={ref}
@@ -144,8 +146,8 @@ export default function FAQSection() {
           {faqs.map((faq, i) => (
             <FAQItem
               key={faq.question}
-              question={faq.question}
-              answer={faq.answer}
+              question={brandText(faq.question, brand)}
+              answer={brandText(faq.answer, brand)}
               isOpen={openIndex === i}
               onToggle={() => setOpenIndex(openIndex === i ? null : i)}
               isLast={i === faqs.length - 1}

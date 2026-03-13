@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { useBrand } from "@/lib/brand-context";
 
 /* ── Illustrations ──────────────────────────────────────── */
 
@@ -463,6 +464,7 @@ function SolutionCard({
 /* ── Section ────────────────────────────────────────────── */
 
 export default function SolutionSection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -478,9 +480,9 @@ export default function SolutionSection() {
           className="mb-14 max-w-2xl"
         >
           <SectionHeader
-            overline="The Vivgram Platform"
+            overline={`The ${brand} Platform`}
             heading="One platform. Complete control."
-            subtext="Replace fragmented tools with a single source of truth. Vivgram connects workflows, automates compliance, and delivers real-time reporting across every stage of the research lifecycle."
+            subtext={`Replace fragmented tools with a single source of truth. ${brand} connects workflows, automates compliance, and delivers real-time reporting across every stage of the research lifecycle.`}
             align="left"
           />
         </motion.div>

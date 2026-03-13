@@ -5,8 +5,10 @@ import { useRef, useState } from "react";
 import { Play } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
+import { useBrand } from "@/lib/brand-context";
 
 export default function ProductPreview() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [isPlaying, setIsPlaying] = useState(false);
@@ -25,8 +27,8 @@ export default function ProductPreview() {
       <Container>
         <SectionHeader
           overline="PLATFORM PREVIEW"
-          heading="See Vivgram in Action"
-          subtext="Watch how Vivgram streamlines your entire research facility operations from a single dashboard."
+          heading={`See ${brand} in Action`}
+          subtext={`Watch how ${brand} streamlines your entire research facility operations from a single dashboard.`}
         />
 
         <motion.div
@@ -57,7 +59,7 @@ export default function ProductPreview() {
               playsInline
               preload="metadata"
               poster="/video-poster.jpg"
-              aria-label="Vivgram platform demo walkthrough"
+              aria-label={`${brand} platform demo walkthrough`}
             >
               {/* Replace this src with your actual video URL */}
               <source src="/demo-video.mp4" type="video/mp4" />

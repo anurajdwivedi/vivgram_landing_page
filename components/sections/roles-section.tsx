@@ -6,6 +6,7 @@ import { Check, ArrowRight, ImageIcon } from "lucide-react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { roles } from "@/lib/constants";
+import { useBrand, brandText } from "@/lib/brand-context";
 
 const accentMap: Record<string, { tab: string; icon: string; iconBg: string; badge: string }> = {
   blue: {
@@ -41,6 +42,7 @@ const accentMap: Record<string, { tab: string; icon: string; iconBg: string; bad
 };
 
 export default function RolesSection() {
+  const { brand } = useBrand();
   const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -148,7 +150,7 @@ export default function RolesSection() {
                   {activeRole.title}
                 </h3>
                 <p className="mt-3 text-base leading-relaxed text-[#64748B]">
-                  {activeRole.description}
+                  {brandText(activeRole.description, brand)}
                 </p>
 
                 <ul className="mt-6 space-y-3">

@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Container } from "@/components/shared/container";
+import { useBrand } from "@/lib/brand-context";
 
 type CubicBezier = [number, number, number, number];
 const ease: CubicBezier = [0.22, 1, 0.36, 1];
@@ -21,6 +22,7 @@ interface FormData {
 }
 
 export default function CTASection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [submitted, setSubmitted] = useState(false);
@@ -71,7 +73,7 @@ export default function CTASection() {
 
             <div className="mt-10 space-y-4">
               {[
-                "Personalized demo of Vivgram",
+                `Personalized demo of ${brand}`,
                 "Expert consultation on your workflow",
                 "No commitment required",
               ].map((item) => (
@@ -82,9 +84,6 @@ export default function CTASection() {
               ))}
             </div>
 
-            <p className="mt-10 text-sm text-blue-300/40">
-              Free demo &middot; Guided setup &middot; Go live in under a week
-            </p>
           </div>
 
           {/* Right — Form */}
@@ -242,7 +241,7 @@ export default function CTASection() {
                     htmlFor="consent"
                     className="text-xs leading-relaxed text-blue-200/50"
                   >
-                    Yes, I want Vivgram to keep me up-to-date with recent
+                    Yes, I want {brand} to keep me up-to-date with recent
                     industry developments including insights, upcoming events,
                     and innovative solution capabilities according to the{" "}
                     <a href="/privacy-policy" className="text-blue-300/70 underline underline-offset-2 hover:text-blue-200">
@@ -256,7 +255,7 @@ export default function CTASection() {
                   disabled={isSubmitting}
                   className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-primary-700 shadow-[0_1px_3px_rgba(0,0,0,0.1)] transition-all duration-200 hover:scale-[1.01] hover:bg-blue-50 disabled:opacity-60 disabled:hover:scale-100"
                 >
-                  {isSubmitting ? "Submitting..." : "Request a Demo"}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                   {!isSubmitting && <ArrowRight className="h-4 w-4" />}
                 </button>
               </form>

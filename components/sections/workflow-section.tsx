@@ -5,8 +5,10 @@ import { useRef } from "react";
 import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { workflowSteps } from "@/lib/constants";
+import { useBrand } from "@/lib/brand-context";
 
 export default function WorkflowSection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -16,7 +18,7 @@ export default function WorkflowSection() {
         <SectionHeader
           overline="HOW IT WORKS"
           heading="From Onboarding to Full Operational Control"
-          subtext="Get your facility running on Vivgram in days, not months. Our structured implementation ensures every team member is productive from day one."
+          subtext={`Get your facility running on ${brand} in days, not months. Our structured implementation ensures every team member is productive from day one.`}
         />
 
         {/* Desktop horizontal flow */}

@@ -6,8 +6,10 @@ import { Container } from "@/components/shared/container";
 import { SectionHeader } from "@/components/shared/section-header";
 import { benefits } from "@/lib/constants";
 import { fadeUp, staggerContainer } from "@/lib/animations";
+import { useBrand } from "@/lib/brand-context";
 
 export default function BenefitsSection() {
+  const { brand } = useBrand();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -21,9 +23,9 @@ export default function BenefitsSection() {
           variants={fadeUp}
         >
           <SectionHeader
-            overline="WHY VIVGRAM"
+            overline={`WHY ${brand.toUpperCase()}`}
             heading="Built for Modern Research Facilities"
-            subtext="Vivgram eliminates the complexity of managing research operations, giving your team more time to focus on what matters most: advancing groundbreaking research."
+            subtext={`${brand} eliminates the complexity of managing research operations, giving your team more time to focus on what matters most: advancing groundbreaking research.`}
           />
         </motion.div>
 
